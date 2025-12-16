@@ -156,7 +156,7 @@ HTML_DASHBOARD = """
         <div id="timer">00:00</div>
         
         <div class="button-group">
-            <button class="btn-work" onclick="control('start')">🌸 Focus</button>
+            <button class="btn-work" onclick="control('start-work')">🌸 Start</button>
             <button class="btn-break" onclick="control('break')">☕ Rest</button>
             <button class="btn-stop" onclick="control('stop')">🍃 Stop</button>
         </div>
@@ -219,7 +219,15 @@ def start_work():
     current_session["end_time"] = time.time() + CONFIG[TimerState.WORK]
     current_session["work_cycles_completed"] = 0
     return {"status": "Work session started", "duration_minutes": 60}
-
+@app.post("/break")
+def start_break():
+    current_session["state"] = TimerState.SHORT_BREAK
+    current_session["start_time"] = time.time()
+    current_session["end_time"] = time.time() + CONFIG[TimerState.SHORT_BREAK]
+    return {"status": "Manual break started"}
+@app.post("/start")
+def start_redirect():
+    return start_work()
 @app.get("/status")
 def get_status():
     """Check how much time is left and what the current state is."""
@@ -237,7 +245,11 @@ def get_status():
         "time_left_seconds": int(time_left),
         "formatted_time": f"{int(time_left // 60)}:{int(time_left % 60):02d}"
     }
-
+@app.post("/stop")
+def stop_timer():
+    current_session["state"] = TimerState.IDLE
+    current_session["end_time"] = None
+    return {"status": "Timer stopped"}
 def handle_timer_expiry():
     """Logic to rotate breaks automatically."""
     prev_state = current_session["state"]
@@ -245,16 +257,10 @@ def handle_timer_expiry():
     # If we just finished working, determine which break to take
     if prev_state == TimerState.WORK:
         current_session["work_cycles_completed"] += 1
-        
-        # Every 4th work cycle (just an example) could be a long break, 
-        # or stick to your logic: alternating.
-        # Your logic: If cycles is even number -> Long Break
-        if current_session["work_cycles_completed"] % 2 == 0:
+        if current_session["work_cycles_completed"]%2 ==0:
              next_state = TimerState.LONG_BREAK
         else:
              next_state = TimerState.SHORT_BREAK
-    
-    # If we just finished a break, go back to work
     else:
         next_state = TimerState.WORK
 
