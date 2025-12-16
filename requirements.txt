@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+requests
+pygetwindow
+pydantic
+tk
