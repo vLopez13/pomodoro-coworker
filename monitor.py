@@ -28,9 +28,9 @@ class HUDApp:
         self.violation_start_time = None
         self.root.attributes("-topmost", True)
         self.root.overrideredirect(True)
-        self.bg_color_work = "#2ecc71"   # Green  (FOCUS WORK!)
-        self.bg_color_break = "#bf1af1f9"  # Purple (SET BREAK)
-        self.bg_color_block = "#1a1a1a"  # Black (DISTRACTED!)
+        self.bg_color_work = "#468347"   # Green  (FOCUS WORK!)
+        self.bg_color_break = "#9b59b6"  # Purple (SET BREAK)
+        self.bg_color_block = "#5c5c5c"  # Grey block (DISTRACTED!)
         self.bg_color_warning = "#f85205" # OrangeRED (WARNING!)
 
         self.label_time = tk.Label(
@@ -119,7 +119,7 @@ class HUDApp:
                 elif not self.is_blocking:
                     self.label_time.config(
                         bg=self.bg_color_warning, 
-                        text=f"COUNTING D {int(remaining_grace)}s..."
+                        text=f"ohno {int(remaining_grace)}s..."
                     )
                     self.root.configure(bg=self.bg_color_warning)
             
