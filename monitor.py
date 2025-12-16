@@ -19,7 +19,7 @@ BLACKLIST = [
     " on X ",       # Catches "Post on X"
     "Twitter"       # Many windows still say Twitter
 ]
-class BOTApp:
+class HUDApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Pomodoro BOT")
@@ -27,7 +27,7 @@ class BOTApp:
 
         self.violation_start_time = None
         self.root.attributes("-topmost", True)
-        self.root.overridereddirect(True)
+        self.root.overrideredirect(True)
         self.bg_color_work = "#2ecc71"   # Green  (FOCUS WORK!)
         self.bg_color_break = "#bf1af1f9"  # Purple (SET BREAK)
         self.bg_color_block = "#1a1a1a"  # Black (DISTRACTED!)
@@ -144,7 +144,7 @@ class BOTApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = BOTApp(root)
+    app = HUDApp(root)
     root.mainloop()  
 
 
