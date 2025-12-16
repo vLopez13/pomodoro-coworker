@@ -192,9 +192,9 @@ HTML_DASHBOARD = """
 </body>
 </html>
 """
-@app.get("/")
-def home():
-    return {"message": "Focus Timer API is Running"}
+@app.get("/", response_class=HTMLResponse)
+async def home():
+    return HTML_DASHBOARD
 
 @app.post("/start-work")
 def start_work():
