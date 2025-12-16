@@ -1,5 +1,7 @@
 # pomodoro.py
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 from enum import Enum
 import time
 
@@ -24,6 +26,14 @@ current_session = {
     "end_time": None,
     "work_cycles_completed": 0
 }
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 HTML_DASHBOARD = """
 <!DOCTYPE html>
 <html>
@@ -168,21 +178,27 @@ HTML_DASHBOARD = """
             const response = await fetch('/status');
             const data = await response.json();
             
-            document.getElementById('timer').innerText = data.formatted_time;
+            document.getElementById('timer').innerText = data.formatted_time || "00:00";
             
             const statusLabel = document.getElementById('status-text');
             const body = document.body;
             
             // Dynamic Aesthetics
-            if(data.state === "WORK") {
-                statusLabel.innerText = "Growing Time...";
-                statusLabel.style.color = "#ff6f61"; // Coral
+           if(data.state === "WORK") {
+                statusLabel.innerText = "Growing Time (Focus)";
+                statusLabel.style.color = "#468347"; // Green
             } else if(data.state.includes("BREAK")) {
-                statusLabel.innerText = "Blossoming Break";
-                statusLabel.style.color = "#4a90e2"; // Blue
+                statusLabel.innerText = "Relaxing Break";
+                statusLabel.style.color = "#9b59b6"; // Purple
             } else {
                 statusLabel.innerText = "Garden is Sleeping";
-                statusLabel.style.color = "#88b04b"; // Sage
+                statusLabel.style.color = "#888"; 
+            }
+            if(data.time_left_seconds > 0 && data.time_left_seconds < 60) {
+                timerElement.style.color = "orangered";
+                statusLabel.style.color = "orangered";
+            } else {
+                timerElement.style.color = "#5d5d5d"; // Reset to grey
             }
         }
 
@@ -208,7 +224,7 @@ def start_work():
 def get_status():
     """Check how much time is left and what the current state is."""
     if current_session["state"] == TimerState.IDLE:
-        return {"state": "IDLE", "time_left": 0}
+        return {"state": "IDLE", "time_left": 0,"formatted_time": "00:00"}
 
     time_left = current_session["end_time"] - time.time()
     
@@ -246,9 +262,11 @@ def handle_timer_expiry():
     current_session["state"] = next_state
     current_session["start_time"] = time.time()
     current_session["end_time"] = time.time() + CONFIG[next_state]
-    
+    time_left = CONFIG[next_state]
+
     return {
-        "alert": "TIMER_FINISHED",
-        "next_state": next_state,
-        "message": f"Switched to {next_state}"
+        "state": next_state,
+        "time_left_seconds": int(time_left),
+        "formatted_time": f"{int(time_left // 60):02d}:{int(time_left % 60):02d}",
+        "alert": "TIMER_FINISHED"
     }
