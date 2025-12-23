@@ -13,11 +13,11 @@ BLACKLIST = [
     "Netflix", 
     "Hulu", 
     "Disney+", 
-    "Prime Video",  # Amazon Prime often uses this
+    "Prime Video",  
     "Reddit", 
-    " / X ",        # Catches "Home / X" 
-    " on X ",       # Catches "Post on X"
-    "Twitter"       # Many windows still say Twitter
+    " / X ",        
+    " on X ",       
+    "Twitter"       
 ]
 class HUDApp:
     def __init__(self, root):

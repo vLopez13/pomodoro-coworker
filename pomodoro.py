@@ -15,9 +15,9 @@ class TimerState(str, Enum):
 
 # Configuration (Seconds)
 CONFIG = {
-    TimerState.WORK: 60 * 60,         # 60 Minutes
-    TimerState.SHORT_BREAK: 5 * 60,   # 5 Minutes
-    TimerState.LONG_BREAK: 15 * 60    # 15 Minutes
+    TimerState.WORK: 60 * 60,        
+    TimerState.SHORT_BREAK: 5 * 60,  
+    TimerState.LONG_BREAK: 15 * 60    
 }
 
 current_session = {
@@ -38,7 +38,7 @@ HTML_DASHBOARD = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pomodoro Garden</title>
+    <title>Pomodoro Timer</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@400;600&display=swap');
 
@@ -150,7 +150,7 @@ HTML_DASHBOARD = """
 <body>
 
     <div class="container">
-        <h1>Focus Garden</h1>
+        <h1>Focus on your Work</h1>
         <div id="status-text" class="subtitle">Ready to grow?</div>
         
         <div id="timer">00:00</div>
@@ -185,13 +185,13 @@ HTML_DASHBOARD = """
             
             // Dynamic Aesthetics
            if(data.state === "WORK") {
-                statusLabel.innerText = "Growing Time (Focus)";
+                statusLabel.innerText = "Focus";
                 statusLabel.style.color = "#468347"; // Green
             } else if(data.state.includes("BREAK")) {
-                statusLabel.innerText = "Relaxing Break";
+                statusLabel.innerText = "Quick Break";
                 statusLabel.style.color = "#9b59b6"; // Purple
             } else {
-                statusLabel.innerText = "Garden is Sleeping";
+                statusLabel.innerText = "This is on sleep state";
                 statusLabel.style.color = "#888"; 
             }
             if(data.time_left_seconds > 0 && data.time_left_seconds < 60) {

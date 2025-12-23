@@ -13,3 +13,7 @@ AGENT BOT JUMPS IN NAMED: The Bouncer (`bouncer.py`): THIS happens in the backgr
 1. Clone the repo:
    ```bash
    git clone [https://github.com/vLopez13/pomodoro-coworker.git](https://github.comvLopez13/pomodoro-coworker.git)
+   <div align="center">
+  <img src="/Animation.gif" width="600" alt="Project Demo">
+  <p><i>A short description of what is happening in this demo.</i></p>
+</div>
